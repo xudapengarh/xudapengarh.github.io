@@ -79,17 +79,25 @@
 
 
 
-<meta name="description" content="问题：假设现在有一个包含有 5000000（500万）个整数型的数据列表，其中的数据范围为 0 — 9999999，并且无重复数据。现在，我们想对这个列表进行排序，该如何去做呢？">
+<meta name="description" content="问题假设现在有一个包含有 5000000（500万）个整数型的数据列表，其中的数据范围为 0 — 9999999，并且无重复数据。现在，我们想对这个列表进行排序，该如何去做呢？">
 <meta name="keywords" content="编程珠玑,算法,Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="编程珠玑-磁盘文件排序">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;index.html">
 <meta property="og:site_name" content="岁虚山">
-<meta property="og:description" content="问题：假设现在有一个包含有 5000000（500万）个整数型的数据列表，其中的数据范围为 0 — 9999999，并且无重复数据。现在，我们想对这个列表进行排序，该如何去做呢？">
+<meta property="og:description" content="问题假设现在有一个包含有 5000000（500万）个整数型的数据列表，其中的数据范围为 0 — 9999999，并且无重复数据。现在，我们想对这个列表进行排序，该如何去做呢？">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;sampleList.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;xudapeng&#x2F;Blog&#x2F;source&#x2F;_posts&#x2F;Programming%20Pearls&#x2F;编程珠玑-磁盘文件排序&#x2F;f1_sorted_1_6.png">
-<meta property="og:updated_time" content="2020-06-14T08:55:42.161Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;f1_sorted_1_6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;f1_sorted_1_1000006.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;f1_示意图.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;f2%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;f2_sorted.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;f2_消耗示意图.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;f3_1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;f3_2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;f2_sorted.png">
+<meta property="og:updated_time" content="2020-06-14T15:08:46.606Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;14&#x2F;Programming%20Pearls&#x2F;%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F&#x2F;sampleList.png">
 
@@ -343,7 +351,7 @@
       
 
       
-        <h2 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h2><p>假设现在有一个包含有 5000000（500万）个整数型的数据列表，其中的数据范围为 0 — 9999999，并且无重复数据。现在，我们想对这个列表进行排序，该如何去做呢？</p>
+        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>假设现在有一个包含有 5000000（500万）个整数型的数据列表，其中的数据范围为 0 — 9999999，并且无重复数据。现在，我们想对这个列表进行排序，该如何去做呢？</p>
 <a id="more"></a>
 
 <p>答案似乎很简单，无论是最简单的冒泡排序，选择排序到稍微复杂点的快速排序、归并排序，甚至许多编程语言都内置了相关的排序算法，都能简单的解决这个问题。</p>
@@ -364,22 +372,108 @@
 <p>2M 内存，能够存储 524288 个整型数据，即大概52万个数据。显然距离我们的500万个数据规模相差甚远。</p>
 <p>既然一次读不完，那么我们是否能够分批对这个文件进行读取处理呢？</p>
 <p>我们似乎看到了曙光。500万个数据，我们每次加入只读取50万个数据进行处理，那么只需要10次处理就行了，那还等什么，让我们开始动手吧！</p>
-<h2 id="分批排序"><a href="#分批排序" class="headerlink" title="分批排序"></a>分批排序</h2><p>首先，我们先创建一个包含500万个不重复的 0 - 9999999 之间的整数，并将其写入到一个文本文件中。</p>
+<h2 id="分批排序"><a href="#分批排序" class="headerlink" title="分批排序"></a>分批排序</h2><p>首先，我们先创建一个包含500万个不重复的 0 - 9999999 之间的整数列表，并将其写入到一个文本文件中。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sampleList = random.sample(range(<span class="number">0</span>, <span class="number">9999999</span>), <span class="number">5000000</span>)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"./磁盘排序_sample.txt"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> file:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(sampleList)):</span><br><span class="line">        <span class="keyword">if</span> i &lt; len(sampleList) - <span class="number">1</span>:</span><br><span class="line">            file.writelines(str(sampleList[i]) + <span class="string">"\n"</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            file.writelines(str(sampleList[i]))</span><br></pre></td></tr></table></figure>
 
-<p>文本内入如下：</p>
+<p>文本内容如下：</p>
 <img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/sampleList.png" alt="样本数据" style="zoom:50%;">
 
 <p>现在，让我们开始吧！</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">batch = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">500000</span>)]</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"./磁盘排序_sample.txt"</span>, <span class="string">"r"</span>) <span class="keyword">as</span> read:</span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> readLine <span class="keyword">in</span> read:</span><br><span class="line">        batch[index] = int(readLine)</span><br><span class="line">        index += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> index == len(batch):</span><br><span class="line">            <span class="keyword">with</span> open(<span class="string">"./磁盘排序_sorted.txt"</span>, <span class="string">"a"</span>) <span class="keyword">as</span> write:</span><br><span class="line">                batch.sort()</span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(batch)):</span><br><span class="line">                    write.writelines(str(batch[i]) + <span class="string">"\n"</span>)</span><br><span class="line">            index = <span class="number">0</span></span><br></pre></td></tr></table></figure>
 
 <p>让我们打开排序后的文本文件看一下内容：</p>
-<img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/xudapeng/Blog/source/_posts/Programming Pearls/编程珠玑-磁盘文件排序/f1_sorted_1_6.png" style="zoom:50%;">
+<img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/f1_sorted_1_6.png" alt style="zoom:50%;">
 
+<p>似乎看起来成功了！</p>
+<p>等一下，我们再详细看一下文本：</p>
+<img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/f1_sorted_1_1000006.png" style="zoom:50%;">
 
+<p>情况似乎有些不对，让我们来分析下我们这个方法：</p>
+<img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/f1_示意图.png" style="zoom:39%;">
 
+<p>通过示意图，我们可以看到：我们将样本数据分为 10 个 batch 来处理，对每个 batch 进行排序后输出到文件中去，我们只能保证的是，在样本数据的 10 个 batch 中的每个 batch 内部，数据是有序的，也就是说，batch1 中的数据是有序的，batch2 中的数据也是有序的，但是，batch1 和 batch2 内的数据是有序的吗？</p>
+<p>并不是，因为我们的排序的数据只局限于每个 batch 中，batch 之间并没有进行过排序操作，因此无法保证分批处理后，得到的所有数据都是有序的。</p>
+<p>这个方法失败了，似乎分批的想法行不通，那么该怎么办呢？</p>
+<p>别急，我们换个角度思考。让我们再审一边问题：</p>
+<blockquote>
+<p>假设现在有一个包含有 5000000（500万）个整数型的数据列表，其中的数据范围为 0 — 9999999，并且无重复数据。现在，我们想对这个列表进行排序，并且使用的内存不能超过 2M，该如何去做呢？</p>
+</blockquote>
+<p>既然将数据分批的思路行不通，那么我们是否能够将样本数据的数据范围进行分批操作呢？</p>
+<p>由问题可知，样本数据的范围是 0 — 9999999，即样本中的每个数据都是1000万内的数字，我们可以使用的内存是 2M ，大概能够记录 50 万个数据。现在，我们把 0—9999999 ，分成 0—499999，500000—999999 …… 9500000—9999999，共20组，我们每次只读取样本数据中的一组数值范围内的数据，并进行排序操作，然后写入文件中去，如下所示：</p>
+<p><img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/f2%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">batchSize = <span class="number">500000</span></span><br><span class="line">batch = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, batchSize)]</span><br><span class="line">batchCount = int(<span class="number">10000000</span> / batchSize)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, batchCount):</span><br><span class="line">    low = i * batchSize</span><br><span class="line">    height = low + batchSize</span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">"./磁盘排序_sample.txt"</span>, <span class="string">"r"</span>) <span class="keyword">as</span> read:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> read:</span><br><span class="line">            <span class="keyword">if</span> int(line) &gt;= low <span class="keyword">and</span> int(line) &lt; height:</span><br><span class="line">                batch[index] = int(line)</span><br><span class="line">                index += <span class="number">1</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">"./磁盘排序_sorted.txt"</span>, <span class="string">"a"</span>) <span class="keyword">as</span> write:</span><br><span class="line">        <span class="keyword">for</span> value <span class="keyword">in</span> sorted(batch[<span class="number">0</span> : index]):</span><br><span class="line">            write.writelines(str(value) + <span class="string">"\n"</span>)</span><br></pre></td></tr></table></figure>
 
+<p>看一下运算结果：</p>
+<img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/f2_sorted.png" style="zoom:50%;">
 
+<p>可以看到，这个方法成功得在限定条件内完成了对样本数据的排序。</p>
+<p>那么，我们看一下这个方法的运行消耗：</p>
+<img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/f2_消耗示意图.png" style="zoom:39%;">
+
+<p>我们可以看到，500万个样本数据，总共读取了20次，相当于总共在磁盘中读取了20 x 500万，即1亿个数据。我们知道，电脑对磁盘的读写速度是远不如对内存读写的速度的。虽然我们成功将数据进行了排序，但是其运行速度十分缓慢，绝大部份时间都消耗在对磁盘数据的读写。</p>
+<p>那么，还有没有更好的方法（更快的方法）完成对磁盘文件的读写呢？让我们继续往下看。</p>
+<h2 id="位向量"><a href="#位向量" class="headerlink" title="位向量"></a>位向量</h2><p>我们设想一种方法，能够最少次数地读取样本文件，能够最少次数的写入结果文件，同时，其排序部分有尽量小的耗时。</p>
+<p>我们再观察一遍问题：</p>
+<blockquote>
+<p>假设现在有一个包含有 5000000（500万）个整数型的数据列表，其中的数据范围为 0 — 9999999，并且无重复数据。现在，我们想对这个列表进行排序，并且使用的内存不能超过 2M，该如何去做呢？</p>
+</blockquote>
+<p>我们之前所关注的重点是：</p>
+<blockquote>
+<p>1、500万个整型数据；</p>
+<p>2、数据分布范围为 0 —9999999；</p>
+<p>3、内存不能超过 2M。</p>
+</blockquote>
+<p>我们似乎忽略了一个重要的点：</p>
+<pre><code>&gt; 1、无重复数据</code></pre><p>这个要点能否帮助我们完成我们期待的算法呢？</p>
+<p>我们来看一个简单的例子，假如我们有一组数据：</p>
+<blockquote>
+<p>0 ，9，4，7，3</p>
+</blockquote>
+<p>我们该如何将这组数据通过一种简单的方法进行排序呢？</p>
+<p>假如我们有10个桶，每个桶只有两种状态：空和满，给这十个桶写上编号，分别是 0 ，1 ，2 …… 9:</p>
+<img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/f3_1.png" alt="f3_1" style="zoom:39%;">
+
+<p>现在，10个桶都是空的，我们把这组数据按照其元素的值的大小，放入编号与值相同的桶中，如 9 放入编号为 9 的桶里，3 放入编号为 3 的桶里。</p>
+<img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/f3_2.png" alt="f3_2" style="zoom:39%;">
+
+<p>现在，我们的10个桶里总共有5个桶是满的，我们只要从头遍历这10个桶，遇到满的桶就将其编号记录下来：</p>
+<blockquote>
+<p>0 ，3 ，4 ，7 ，9</p>
+</blockquote>
+<p>我们似乎已经得到了排序好的数据。那么，我们是否能用这个方法来解决我们最初的问题呢？</p>
+<p>首先，我们来分析一下上面方法能够使用的条件：</p>
+<blockquote>
+<p>1、要有足够多的桶（桶的编号要能包含样本数据中所有元素的可能值）；</p>
+<p>2、样本数据不重复；</p>
+</blockquote>
+<p>我们来看我们的题目是否满足以上两点要求：</p>
+<blockquote>
+<p>1、要有足够多的桶：</p>
+<p>​    我们的样本数据范围是 0 — 9999999 ，那么我们就需要 1000万个桶，假如我们定义一个 int 型数组来当作桶，那么这个数组的大小应该是 int a[10000000]；很容易算出来，a 的大小应该是 10000000 x 4 / 1024 /1024 = 38.15M ，但是我们能够使用的内存只有 2M，不满足条件。</p>
+<p>2、数据不重复：</p>
+<p>​    由题目可知，我们的样本数据无重复数据，因此是满足条件的。</p>
+</blockquote>
+<p>似乎又陷入了僵局，还是内存大小不满足条件，那我们真的没有别的办法了吗？</p>
+<p>等一下，我们知道，一个 int 型数据占 4 个字节，而一个字节是 8 个比特位，我们能否用一个比特位来当作一个桶呢？</p>
+<p>稍微计算一下，1000万个桶就是1000万个比特位 = 1.2M，比问题中要求的要小，似乎是可行的！</p>
+<p>我们来尝试一下（1000万比特位是 312500 个 int 型数组的大小）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">bucketCount = <span class="number">312500</span></span><br><span class="line">buckets = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, bucketCount)]</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"./磁盘排序_sample.txt"</span>, <span class="string">"r"</span>) <span class="keyword">as</span> read:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> read:</span><br><span class="line">        bucketIndex = int(int(line) / <span class="number">32</span>)</span><br><span class="line">        byteIndex = int(line) % <span class="number">32</span></span><br><span class="line">        buckets[bucketIndex] = buckets[bucketIndex] | (<span class="number">1</span> &lt;&lt; byteIndex)</span><br><span class="line">        </span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"./磁盘排序_sorted.txt"</span>, <span class="string">"a"</span>) <span class="keyword">as</span> write:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, bucketCount):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">32</span>):</span><br><span class="line">            <span class="keyword">if</span> buckets[i] &amp; (<span class="number">1</span> &lt;&lt; j) != <span class="number">0</span>:</span><br><span class="line">                write.writelines(str(i * <span class="number">32</span> + j) + <span class="string">"\n"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>查看运行结果：</p>
+<img src="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/f2_sorted.png" style="zoom:50%;">
+
+<p>成功！</p>
+<h2 id="引申1"><a href="#引申1" class="headerlink" title="引申1"></a>引申1</h2><p>如果我们再加一个限定条件，所使用内存不能超过 1M，那我们这个算法还适用吗？</p>
+<p>答案显而易见，我们想要使用这个算法，最少需要使用大概 1.2M 的内存空间，因此这个算法就不能适用了。那我们该怎么办呢？</p>
+<p>会想下我们最开始的做法，我们只要将样本数据的数据范围 0—9999999 分为两批：</p>
+<blockquote>
+<p>0—4999999</p>
+<p>5000000—9999999</p>
+</blockquote>
+<p>然后将这两种算法相结合，便能满足我们的需求。</p>
+<h2 id="引申2"><a href="#引申2" class="headerlink" title="引申2"></a>引申2</h2><p>如果样本数据中的数据是可以重复的，但是每个数据的重复次数不超过10次，那么这个算法还能适用吗？</p>
+<p>这种情况下，我们只需要将算法进行稍微的变动。我们原本的做法是将 1 个比特位当作一个桶，现在，我们将 4 个比特位当作一个桶，那么，一个桶的状态便有 16 种情况，即一个桶可以表示 0—15 的数据，我们只要将重复的数据塞到同一个桶里，同时，这个桶通过其本身的 4 比特位进行计数。读取完毕后，再反过来遍历桶，便能达到我们的目的。</p>
+<p>如果将 4b 当作一个桶，我们需要的内存大概是 4.7M，超出了 2M 的内存大小，这事，我们便可以将样本数据的范围进行分批处理，同样能够满足问题的要求。</p>
 
       
     </div>
@@ -558,7 +652,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题："><span class="nav-number">1.</span> <span class="nav-text">问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分批排序"><span class="nav-number">2.</span> <span class="nav-text">分批排序</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分批排序"><span class="nav-number">2.</span> <span class="nav-text">分批排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#位向量"><span class="nav-number">3.</span> <span class="nav-text">位向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引申1"><span class="nav-number">4.</span> <span class="nav-text">引申1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引申2"><span class="nav-number">5.</span> <span class="nav-text">引申2</span></a></li></ol></div>
             
 
           </div>
