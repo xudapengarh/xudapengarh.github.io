@@ -63,7 +63,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/start_nginx_service.png">
 <meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/reboot_nginx_status.png">
 <meta property="article:published_time" content="2020-06-16T05:07:56.000Z">
-<meta property="article:modified_time" content="2020-06-16T17:31:07.676Z">
+<meta property="article:modified_time" content="2020-06-16T17:32:32.474Z">
 <meta property="article:author" content="许大鹏">
 <meta property="article:tag" content="Hexo">
 <meta name="twitter:card" content="summary">
@@ -256,7 +256,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-17 01:31:07" itemprop="dateModified" datetime="2020-06-17T01:31:07+08:00">2020-06-17</time>
+                <time title="修改时间：2020-06-17 01:32:32" itemprop="dateModified" datetime="2020-06-17T01:32:32+08:00">2020-06-17</time>
               </span>
 
           
@@ -324,7 +324,7 @@
 <p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/cheak_git_2.png" style="zoom:50%;"></p>
 <p>出现 git 的版本，说明安装成功。</p>
 <h3 id="创建-git-服务器"><a href="#创建-git-服务器" class="headerlink" title="创建 git 服务器"></a>创建 git 服务器</h3><p>首先，我们需要在系统中创建一个名为 git 的用户组和用户来运行 git 服务：</p>
-<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">groupadd git						<span class="comment">//创建 git 用户组</span></span><br><span class="line">useradd git -g git			<span class="comment">//创建 git 用户</span></span><br><span class="line">passwd git  						<span class="comment">//设置 git 用户密码</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">groupadd git            <span class="comment">//创建 git 用户组</span></span><br><span class="line">useradd git -g git      <span class="comment">//创建 git 用户</span></span><br><span class="line">passwd git              <span class="comment">//设置 git 用户密码</span></span><br></pre></td></tr></table></figure>
 <p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/xudapeng/Blog/source/_posts/Hexo/Hexo博客部署到VPS/add_git_user.png" style="zoom:50%;"></p>
 <p>创建完成后，我们需要给 git 用户添加账户权限，用户权限需要通过编辑 /ect/sudoers 进行设置。</p>
 <p>通过命令打开 /ect/sudoers 文件：</p>
