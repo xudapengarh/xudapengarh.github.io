@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言Hexo 博客搭建完成后，可以将博客部署到 git 服务商提供的静态网页服务上，如 Github，Gitee等。当然，如果有自己的 VPS 服务器的话，还可以将博客部署到 VPS 服务器上，通过 IP 或者有域名来进行访问。 本文记录将 Hexo 部署到 VPS 的步骤，以供参阅。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo博客部署到VPS">
+<meta property="og:url" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/index.html">
+<meta property="og:site_name" content="岁虚山">
+<meta property="og:description" content="前言Hexo 博客搭建完成后，可以将博客部署到 git 服务商提供的静态网页服务上，如 Github，Gitee等。当然，如果有自己的 VPS 服务器的话，还可以将博客部署到 VPS 服务器上，通过 IP 或者有域名来进行访问。 本文记录将 Hexo 部署到 VPS 的步骤，以供参阅。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/sshlogin.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/cheak_git_1.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/install_git.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/confim_install.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/cheak_git_2.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/xudapeng/Blog/source/_posts/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/add_git_user.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/access_git_1.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/access_git_2.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/access_git_3.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/su_git_1.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/home_git_1.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/xudapeng/Blog/source/_posts/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/ssh_copy_id.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/chmode_ssh.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/mkdir_blog.git.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/git_init.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/xudapeng/Blog/source/_posts/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/cheak_access_git_blog.git.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/mkdir_www_blog.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/ll_three_1.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/sudo_chown_var_www_blog.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/blog.git_hooks.png">
+<meta property="article:published_time" content="2020-06-16T05:07:56.000Z">
+<meta property="article:modified_time" content="2020-06-16T09:28:57.715Z">
+<meta property="article:author" content="许大鹏">
+<meta property="article:tag" content="Hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/sshlogin.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Hexo博客部署到VPS | 岁虚山</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">岁虚山</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">行由不得，反求诸己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="许大鹏">
+      <meta itemprop="description" content="杀人须就咽喉上着刀<br>吾人为学<br>当从心髓入微处用力<br>自然笃实光辉">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="岁虚山">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hexo博客部署到VPS
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-16 13:07:56 / 修改时间：17:28:57" itemprop="dateCreated datePublished" datetime="2020-06-16T13:07:56+08:00">2020-06-16</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Hexo 博客搭建完成后，可以将博客部署到 git 服务商提供的静态网页服务上，如 Github，Gitee等。当然，如果有自己的 VPS 服务器的话，还可以将博客部署到 VPS 服务器上，通过 IP 或者有域名来进行访问。</p>
+<p>本文记录将 Hexo 部署到 VPS 的步骤，以供参阅。</p>
+<a id="more"></a>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>VPS端</p>
+<blockquote>
+<p>CentOS 7.6 64位</p>
+<p>Git</p>
+<p>宝塔控制面板</p>
+<p>Nginx</p>
+</blockquote>
+<p>本地</p>
+<blockquote>
+<p>Git</p>
+<p>Hexo</p>
+</blockquote>
+<p>本地 Hexo 博客已经搭建好了，再次不做赘述。详细步骤可以参考我之前的文章。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>当使用 hexo g 命令生成博客内容时，Hexo 实际上是将我们编写的 md 文件编译成 html 文件，存放在 Hexo 根目录下的 public 文件夹中。而我们使用 hexo d 命令后，Hexo 会把 public 文件夹中的内容通过 git 上传到 git 服务器上，服务器将 public 中的内容部署到博客站点上，我们就可以通过 git 服务器提供的站点网址访问我们的博客内容。</p>
+<p>因此，我们要想在 vps 上部署我们的博客，要做的内容其实就很清楚了：</p>
+<blockquote>
+<p>1、在 vps 上创建 git 服务器；</p>
+<p>2、在 vps 上创建网站；</p>
+<p>3、通过 hero d 命令上传本地博客内容；</p>
+<p>4、vps 自动将上传的内容部署到站点内；</p>
+<p>5、通过域名或站点网址访问博客。</p>
+</blockquote>
+<h2 id="在-vps-服务器上创建-Git-服务器"><a href="#在-vps-服务器上创建-Git-服务器" class="headerlink" title="在 vps 服务器上创建 Git 服务器"></a>在 vps 服务器上创建 Git 服务器</h2><h3 id="安装-Git"><a href="#安装-Git" class="headerlink" title="安装 Git"></a>安装 Git</h3><p>首先，我们需要购买一台 安装有 Linux 系统的 VPS 服务器，本文使用的 Linux 系统是 CentOS 64 位。</p>
+<p>我们通过 ssh 登录到我们的服务器：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root<span class="meta">&amp;yourip</span></span><br></pre></td></tr></table></figure>
+<p>按照提示输入密码后：</p>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/sshlogin.png" alt="sshlogin" style="zoom:50%;"></p>
+<p>出现如下界面表示登录成功。</p>
+<p>现在，让我们来看一下 git 是否安装，输入命令</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="comment">--version</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/cheak_git_1.png" style="zoom:50%;"></p>
+<p>如提示未找到命令，说明我们的系统中尚未安装 git，因此我们需要先在系统中安装 git：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> git</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/install_git.png" style="zoom:50%;"></p>
+<p>出现以上界面说明 git 正在安装。</p>
+<p>安装过程中可能会出现询问是否确认安装的界面：</p>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/confim_install.png" style="zoom:50%;"></p>
+<p>按照提示，确认安装即可。</p>
+<p>安装完成后检查一下是否安装成功：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="comment">--version</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/cheak_git_2.png" style="zoom:50%;"></p>
+<p>出现 git 的版本，说明安装成功。</p>
+<h3 id="创建-git-服务器"><a href="#创建-git-服务器" class="headerlink" title="创建 git 服务器"></a>创建 git 服务器</h3><p>首先，我们需要在系统中创建一个名为 git 的用户组和用户来运行 git 服务：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">groupadd git						<span class="comment">//创建 git 用户组</span></span><br><span class="line">useradd git -g git			<span class="comment">//创建 git 用户</span></span><br><span class="line">passwd git  						<span class="comment">//设置 git 用户密码</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/xudapeng/Blog/source/_posts/Hexo/Hexo博客部署到VPS/add_git_user.png" style="zoom:50%;"></p>
+<p>创建完成后，我们需要给 git 用户添加账户权限，用户权限需要通过编辑 /ect/sudoers 进行设置。</p>
+<p>通过命令打开 /ect/sudoers 文件：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="number">740</span> <span class="regexp">/etc/</span>sudoers</span><br><span class="line">vim <span class="regexp">/etc/</span>sudoers</span><br></pre></td></tr></table></figure>
+<p>找到：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## Allow root <span class="keyword">to</span> run <span class="keyword">any</span> commands anywhere</span><br><span class="line">root    <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)       <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/access_git_1.png" style="zoom:50%;"></p>
+<p>按 i 进入 vim 的编辑模式，添加一行：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git     <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)       <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/access_git_2.png" style="zoom:50%;"></p>
+<p>按 ESC 键退出编辑模式，输入 :wq 回车退出，并将 /etc/sudoers 改回权限：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="number">400</span> /etc/sudoers</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/access_git_3.png" style="zoom:50%;"></p>
+<p>现在，通过</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">su git</span></span><br></pre></td></tr></table></figure>
+<p>命令切换至 git 用户：</p>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/su_git_1.png" style="zoom:50%;"></p>
+<p>通过 cd 命令，进入到 /home/git/ 路径下，并输入 pwd 命令查看当前路径以确认是否正确进入到该路径下：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> <span class="string">/home/git</span></span><br><span class="line"><span class="keyword">pwd</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/home_git_1.png" style="zoom:50%;"></p>
+<p>接下来，首先，我们先关闭这个 ssh 连接，然后通过 ssh 将本地计算机的 ssh 公钥上传到服务器上（中间需要输入一次 git 用户的密码）:</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-<span class="keyword">copy</span>-<span class="built_in">id</span> git@yourip</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/xudapeng/Blog/source/_posts/Hexo/Hexo博客部署到VPS/ssh_copy_id.png" alt></p>
+<p>接下来，重新登录到 vps ，切换至 git 用户，进入到 /home/git/.ssh 目录下赋予 authorized_keys 文件及 .ssh 目录相应的权限：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod 600 authorzied_keys </span><br><span class="line"><span class="keyword">cd</span> <span class="string">..</span></span><br><span class="line">chmod 700 <span class="string">.ssh</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/chmode_ssh.png" style="zoom:50%;"></p>
+<p>再次退出登录，使用 ssh 通过</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ssh</span> git<span class="variable">@yourip</span></span><br></pre></td></tr></table></figure>
+<p>免密码登录到 vps 上。</p>
+<p>在 git 目录下，创建 blog.git 目录：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> blog.git</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/mkdir_blog.git.png" style="zoom:50%;"></p>
+<p>通过 cd 命令进入到 blog.git 目录下，并输入</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init <span class="comment">--bare</span></span><br></pre></td></tr></table></figure>
+<p>创建裸 git 仓库：</p>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/git_init.png" style="zoom:50%;"></p>
+<p>输入</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ll /<span class="built_in">home</span>/git/blog.git</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/xudapeng/Blog/source/_posts/Hexo/Hexo博客部署到VPS/cheak_access_git_blog.git.png" style="zoom:50%;"></p>
+<p>若上图中红色标注的位置是 git 说明 git 用户对 /home/blog 目录有操作权限，若显示的是 root 则需要</p>
+<p>通过</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chown <span class="string">git:</span>git -R <span class="regexp">/home/</span>git/blog.git</span><br></pre></td></tr></table></figure>
+<p>命令对 /home/git/blog.git 目录权限进行更改。</p>
+<p>通过 sudo 命令在 /var 检查有没有 www 目录，若没有，则创建 www 目录。</p>
+<p>在 www 目录下创建 blog 目录</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> /<span class="keyword">var</span></span><br><span class="line"><span class="keyword">cd</span> www</span><br><span class="line">sudo <span class="keyword">mkdir</span> www</span><br><span class="line">sudo <span class="keyword">mkdir</span> blog</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/mkdir_www_blog.png" style="zoom:50%;"></p>
+<p>确保 </p>
+<blockquote>
+<p>/home/git/blog.git</p>
+<p>/home/git/.ssh</p>
+<p>/var/www/blog</p>
+</blockquote>
+<p>三个目录的用户权限组都是 git :</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ll <span class="meta-keyword">/home/</span>git/blog.git</span><br><span class="line">ll <span class="meta-keyword">/home/</span>git/.ssh</span><br><span class="line">ll <span class="meta-keyword">/var/</span>www</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/ll_three_1.png" style="zoom:50%;"></p>
+<p>可以看到，/var/www 目录的权限是 root ，通过以下命令对其权限进行修改：</p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chown g<span class="symbol">it:gi</span><span class="built_in">t</span> -R /<span class="built_in">var</span>/www/blog</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/sudo_chown_var_www_blog.png" style="zoom:50%;"></p>
+<h2 id="自动部署上传内容"><a href="#自动部署上传内容" class="headerlink" title="自动部署上传内容"></a>自动部署上传内容</h2><p>这里，我们使用 Git Hooks来进行博客内容的自动部署。</p>
+<blockquote>
+<p>Git Hooks</p>
+<p>Git Hooks 可以理解为 Git 在特定事件发生之前或之后执行的脚本。</p>
+<p>通过编写 Git Hooks 脚本，我们来实现 Git 服务器对本地计算机 hexo 博客上传后的自动部署功能。 </p>
+</blockquote>
+<p>打开 /home/git/blog.git 目录：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> <span class="string">/home/git/blog.git</span></span><br><span class="line"><span class="keyword">ls</span></span><br><span class="line"><span class="keyword">cd</span> hooks</span><br><span class="line"><span class="keyword">ls</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/blog.git_hooks.png" style="zoom:50%;"></p>
+<p>通过 vim 创建 post-receive 文件：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">vi post-receive</span></span><br></pre></td></tr></table></figure>
+<p>将一下子内容复制到 post-receive 文件中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">GIT_REPO=/home/git/blog.git</span><br><span class="line">TMP_GIT_CLONE=/tmp/blog</span><br><span class="line">PUBLIC_WWW=/var/www/blog</span><br><span class="line">rm -rf <span class="variable">$&#123;TMP_GIT_CLONE&#125;</span></span><br><span class="line">git <span class="built_in">clone</span> <span class="variable">$GIT_REPO</span> <span class="variable">$TMP_GIT_CLONE</span></span><br><span class="line">rm -rf <span class="variable">$&#123;PUBLIC_WWW&#125;</span>/*</span><br><span class="line">cp -rf <span class="variable">$&#123;TMP_GIT_CLONE&#125;</span>/* <span class="variable">$&#123;PUBLIC_WWW&#125;</span></span><br></pre></td></tr></table></figure>
+<p>保存退出后，执行</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x post-<span class="keyword">receive</span></span><br></pre></td></tr></table></figure>
+<p>命令赋予可执行权限。</p>
+
+    </div>
+
+    
+    
+    
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------本文结束 <i class="fa fa-hourglass-end"></i> 感谢阅读-------------
+        </div>
+    
+</div>
+        <div class="reward-container">
+  <div>打赏一包辣条</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="许大鹏 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="许大鹏 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/" rel="prev" title="编程珠玑-磁盘文件排序">
+      <i class="fa fa-chevron-left"></i> 编程珠玑-磁盘文件排序
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">3.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在-vps-服务器上创建-Git-服务器"><span class="nav-number">4.</span> <span class="nav-text">在 vps 服务器上创建 Git 服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Git"><span class="nav-number">4.1.</span> <span class="nav-text">安装 Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-git-服务器"><span class="nav-number">4.2.</span> <span class="nav-text">创建 git 服务器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动部署上传内容"><span class="nav-number">5.</span> <span class="nav-text">自动部署上传内容</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="许大鹏"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">许大鹏</p>
+  <div class="site-description" itemprop="description">杀人须就咽喉上着刀<br>吾人为学<br>当从心髓入微处用力<br>自然笃实光辉</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许大鹏</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
