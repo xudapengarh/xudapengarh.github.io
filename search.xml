@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>编程珠玑-向量旋转</title>
+      <link href="/2020/06/21/Programming%20Pearls/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC/"/>
+      <url>/2020/06/21/Programming%20Pearls/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC/</url>
+      
+        <content type="html"><![CDATA[<h2 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h2><p>假设我们有这么一个问题：</p><p>我们有一个 n 维的向量（数组），现在我们需要将前面的 r 个元素移动到末尾，如下所示：</p><p><img src="/2020/06/21/Programming%20Pearls/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC/向量旋转示例1.png" style="zoom:100%;"></p><p>我们该如何操作呢？</p><a id="more"></a><h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><p>如果对操作方法不加任何限制，我们可以将这个向量当作数组来进行操作</p><blockquote><p>1、定义一个额外的数组，保存前 r 个数据；</p><p>2、将剩下的 n - r 个数据从第 r + 1 位向前平移 r 位；</p><p>3、将额外数组中的数据复制到 原数组的后 r 位中。</p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">7</span></span><br><span class="line">r = <span class="number">3</span></span><br><span class="line">samples = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>, <span class="string">'g'</span>]</span><br><span class="line">tmpsample = [<span class="string">''</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,r)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, r):</span><br><span class="line">    tmpsample[i] = samples[i]</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(r, n):</span><br><span class="line">    samples[i - r] = samples[i]</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n - r, n):</span><br><span class="line">    samples[i] = tmpsample[i - (n - r)]</span><br></pre></td></tr></table></figure><p>我们来分析一下上面方法的消耗：</p><blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">7</span></span><br><span class="line">r = <span class="number">3</span></span><br><span class="line">samples = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>, <span class="string">'g'</span>]</span><br><span class="line">tmpsample = [<span class="string">''</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,r)]           <span class="comment">#开辟了一个大小为 r 的数组</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, r): <span class="comment">#r 次赋值操作</span></span><br><span class="line">    tmpsample[i] = samples[i]</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(r, n):<span class="comment">#n - r 次赋值操作</span></span><br><span class="line">    samples[i - r] = samples[i]</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n - r, n):<span class="comment">#r 次赋值操作</span></span><br><span class="line">    samples[i] = tmpsample[i - (n - r)]</span><br></pre></td></tr></table></figure><p>1、大小为 r 的额外空间</p><p>2、n + r 次赋值操作（忽略循环本身内部消耗）</p></blockquote><p>看起来似乎很简单，但是我们要注意一点，采用这种方法的时候，我们额外开辟了一个大小为 r 的数组，在上面的例子中，r = 3 ，可能我们觉得这个开销并不算什么，但是当我们的数据达到一定数量时（比如 n = 100000000， r = 99999999），这个额外的空间开销以及时间消耗就十分巨大了。而我们可能并没有足够的内存空间以及时间来让我们使用。</p><h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><p>看起来第一个方法足够简单清晰，但是性能似乎并不是那么好。那么，还有其他的方法吗？</p><p>让我们思考一下，对向量的旋转在操作的本质上就是对数据的平移，之所以消耗了大量的空间以及时间，就在于我们在将后面的数据平移到前面的数据时，需要临时保存前面的数据。</p><p>但是，我们同样可以发现，在我们平移最后的 r 位数据时，后面的这些空间似乎被浪费掉了。那么，我们能否将最后面的这 r 个空间利用起来呢？</p><p>让我们将整个数组想象成一个圆环，然后从最后面的一位向前平移 r 位，被替换的数字同样向前平移 r 位，直到到达数组中的前 r 位数据，这时，我们将这一位数据放到最后面的 r 位中：</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程珠玑 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 编程珠玑 </tag>
+            
+            <tag> 算法 </tag>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hexo博客部署到VPS</title>
       <link href="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/"/>
       <url>/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/</url>

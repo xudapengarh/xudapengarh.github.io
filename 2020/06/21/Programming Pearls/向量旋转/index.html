@@ -22,20 +22,24 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="概述手写数字识别——机器学习领域的Hello World 本章将通过实现手写数字识别的程序，用以探讨K近邻算法的进阶使用。">
+  <meta name="description" content="场景描述假设我们有这么一个问题： 我们有一个 n 维的向量（数组），现在我们需要将前面的 r 个元素移动到末尾，如下所示：  我们该如何操作呢？">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K近邻算法进阶-手写数字识别">
-<meta property="og:url" content="http://yoursite.com/2019/06/30/Machine%20Learning/machine-learning-K%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6-%E6%89%8B%E5%86%99%E6%B1%89%E5%AD%97%E8%AF%86%E5%88%AB/index.html">
+<meta property="og:title" content="编程珠玑-向量旋转">
+<meta property="og:url" content="http://yoursite.com/2020/06/21/Programming%20Pearls/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC/index.html">
 <meta property="og:site_name" content="岁虚山">
-<meta property="og:description" content="概述手写数字识别——机器学习领域的Hello World 本章将通过实现手写数字识别的程序，用以探讨K近邻算法的进阶使用。">
+<meta property="og:description" content="场景描述假设我们有这么一个问题： 我们有一个 n 维的向量（数组），现在我们需要将前面的 r 个元素移动到末尾，如下所示：  我们该如何操作呢？">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-06-30T09:48:37.000Z">
-<meta property="article:modified_time" content="2019-06-30T10:19:32.000Z">
+<meta property="og:image" content="http://yoursite.com/2020/06/21/Programming%20Pearls/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC%E7%A4%BA%E4%BE%8B1.png">
+<meta property="article:published_time" content="2020-06-20T16:02:13.000Z">
+<meta property="article:modified_time" content="2020-07-02T03:19:17.527Z">
 <meta property="article:author" content="许大鹏">
-<meta property="article:tag" content="机器学习实战">
+<meta property="article:tag" content="编程珠玑">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/21/Programming%20Pearls/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC%E7%A4%BA%E4%BE%8B1.png">
 
-<link rel="canonical" href="http://yoursite.com/2019/06/30/Machine%20Learning/machine-learning-K%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6-%E6%89%8B%E5%86%99%E6%B1%89%E5%AD%97%E8%AF%86%E5%88%AB/">
+<link rel="canonical" href="http://yoursite.com/2020/06/21/Programming%20Pearls/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC/">
 
 
 <script id="page-configurations">
@@ -48,7 +52,7 @@
   };
 </script>
 
-  <title>K近邻算法进阶-手写数字识别 | 岁虚山</title>
+  <title>编程珠玑-向量旋转 | 岁虚山</title>
   
 
 
@@ -192,7 +196,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/30/Machine%20Learning/machine-learning-K%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6-%E6%89%8B%E5%86%99%E6%B1%89%E5%AD%97%E8%AF%86%E5%88%AB/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/21/Programming%20Pearls/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -205,7 +209,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          K近邻算法进阶-手写数字识别
+          编程珠玑-向量旋转
         </h1>
 
         <div class="post-meta">
@@ -214,17 +218,23 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-06-30 17:48:37 / 修改时间：18:19:32" itemprop="dateCreated datePublished" datetime="2019-06-30T17:48:37+08:00">2019-06-30</time>
+              <time title="创建时间：2020-06-21 00:02:13" itemprop="dateCreated datePublished" datetime="2020-06-21T00:02:13+08:00">2020-06-21</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-02 11:19:17" itemprop="dateModified" datetime="2020-07-02T11:19:17+08:00">2020-07-02</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">机器学习实战</span></a>
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91/" itemprop="url" rel="index"><span itemprop="name">编程珠玑</span></a>
                 </span>
             </span>
 
@@ -246,22 +256,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>手写数字识别——机器学习领域的Hello World</p>
-<p>本章将通过实现手写数字识别的程序，用以探讨K近邻算法的进阶使用。</p>
+        <h2 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h2><p>假设我们有这么一个问题：</p>
+<p>我们有一个 n 维的向量（数组），现在我们需要将前面的 r 个元素移动到末尾，如下所示：</p>
+<p><img src="/2020/06/21/Programming%20Pearls/%E5%90%91%E9%87%8F%E6%97%8B%E8%BD%AC/向量旋转示例1.png" style="zoom:100%;"></p>
+<p>我们该如何操作呢？</p>
 <a id="more"></a>
-<h2 id="数据集介绍"><a href="#数据集介绍" class="headerlink" title="数据集介绍"></a>数据集介绍</h2><p>本章用以进行程序实现的数据集来源于《机器学习实战》一书的源码中的数据集。</p>
-<p>该数据集包含于两个目录内：</p>
+<h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><p>如果对操作方法不加任何限制，我们可以将这个向量当作数组来进行操作</p>
 <blockquote>
-<p>TrainingDigits</p>
-<p>TestDigits</p>
+<p>1、定义一个额外的数组，保存前 r 个数据；</p>
+<p>2、将剩下的 n - r 个数据从第 r + 1 位向前平移 r 位；</p>
+<p>3、将额外数组中的数据复制到 原数组的后 r 位中。</p>
 </blockquote>
-<p>我们使用的数据集中，所使用的样本并非是图片格式的数据，而是类似于将数字的灰度图片转换为 0，1 信息的文本文件。</p>
-<p>数字 0 对应的样本数据内容如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">7</span></span><br><span class="line">r = <span class="number">3</span></span><br><span class="line">samples = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>, <span class="string">'g'</span>]</span><br><span class="line">tmpsample = [<span class="string">''</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,r)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, r):</span><br><span class="line">    tmpsample[i] = samples[i]</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(r, n):</span><br><span class="line">    samples[i - r] = samples[i]</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n - r, n):</span><br><span class="line">    samples[i] = tmpsample[i - (n - r)]</span><br></pre></td></tr></table></figure>
+<p>我们来分析一下上面方法的消耗：</p>
 <blockquote>
-<p>00000000000001100000000000000000<br>00000000000011111100000000000000<br>00000000000111111111000000000000<br>00000000011111111111000000000000<br>00000001111111111111100000000000<br>00000000111111100011110000000000<br>00000001111110000001110000000000<br>00000001111110000001110000000000<br>00000011111100000001110000000000<br>00000011111100000001111000000000<br>00000011111100000000011100000000<br>00000011111100000000011100000000<br>00000011111000000000001110000000<br>00000011111000000000001110000000<br>00000001111100000000000111000000<br>00000001111100000000000111000000<br>00000001111100000000000111000000<br>00000011111000000000000111000000<br>00000011111000000000000111000000<br>00000000111100000000000011100000<br>00000000111100000000000111100000<br>00000000111100000000000111100000<br>00000000111100000000001111100000<br>00000000011110000000000111110000<br>00000000011111000000001111100000<br>00000000011111000000011111100000<br>00000000011111000000111111000000<br>00000000011111100011111111000000<br>00000000000111111111111110000000<br>00000000000111111111111100000000<br>00000000000011111111110000000000<br>00000000000000111110000000000000</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">7</span></span><br><span class="line">r = <span class="number">3</span></span><br><span class="line">samples = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>, <span class="string">'g'</span>]</span><br><span class="line">tmpsample = [<span class="string">''</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,r)]           <span class="comment">#开辟了一个大小为 r 的数组</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, r):													 <span class="comment">#r 次赋值操作</span></span><br><span class="line">    tmpsample[i] = samples[i]	</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(r, n):													<span class="comment">#n - r 次赋值操作</span></span><br><span class="line">    samples[i - r] = samples[i]</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n - r, n):											<span class="comment">#r 次赋值操作</span></span><br><span class="line">    samples[i] = tmpsample[i - (n - r)]</span><br></pre></td></tr></table></figure>
+<p>1、大小为 r 的额外空间</p>
+<p>2、n + r 次赋值操作（忽略循环本身内部消耗）</p>
 </blockquote>
-<p>可以看到，由 0 和 1组成的32 x 32的数字矩阵大概构成了一幅手写数字 0 的图片。</p>
-<p>其中，TrainingDigits 目录下包含了数字 0-9 的32 x 32的txt文件形式（如下图）2000个例子。每个例子都是一个txt文件，</p>
+<p>看起来似乎很简单，但是我们要注意一点，采用这种方法的时候，我们额外开辟了一个大小为 r 的数组，在上面的例子中，r = 3 ，可能我们觉得这个开销并不算什么，但是当我们的数据达到一定数量时（比如 n = 100000000， r = 99999999），这个额外的空间开销以及时间消耗就十分巨大了。而我们可能并没有足够的内存空间以及时间来让我们使用。</p>
+<h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><p>看起来第一个方法足够简单清晰，但是性能似乎并不是那么好。那么，还有其他的方法吗？</p>
+<p>让我们思考一下，对向量的旋转在操作的本质上就是对数据的平移，之所以消耗了大量的空间以及时间，就在于我们在将后面的数据平移到前面的数据时，需要临时保存前面的数据。</p>
+<p>但是，我们同样可以发现，在我们平移最后的 r 位数据时，后面的这些空间似乎被浪费掉了。那么，我们能否将最后面的这 r 个空间利用起来呢？</p>
+<p>让我们将整个数组想象成一个圆环，然后从最后面的一位向前平移 r 位，被替换的数字同样向前平移 r 位，直到到达数组中的前 r 位数据，这时，我们将这一位数据放到最后面的 r 位中：</p>
 
     </div>
 
@@ -298,7 +315,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/" rel="tag"># 机器学习实战</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91/" rel="tag"># 编程珠玑</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
           </div>
 
         
@@ -307,13 +326,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/04/17/Machine%20Learning/machine-learning-K%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95/" rel="prev" title="K近邻算法">
-      <i class="fa fa-chevron-left"></i> K近邻算法
+    <a href="/2020/06/16/Hexo/Hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0VPS/" rel="prev" title="Hexo博客部署到VPS">
+      <i class="fa fa-chevron-left"></i> Hexo博客部署到VPS
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/06/14/Programming%20Pearls/%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E6%8E%92%E5%BA%8F/" rel="next" title="编程珠玑-磁盘文件排序">
-      编程珠玑-磁盘文件排序 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -372,7 +388,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集介绍"><span class="nav-number">2.</span> <span class="nav-text">数据集介绍</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#场景描述"><span class="nav-number">1.</span> <span class="nav-text">场景描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一"><span class="nav-number">2.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二"><span class="nav-number">3.</span> <span class="nav-text">方法二</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -494,7 +510,7 @@
 
 
   
-<script src="/js/local-search.js"></script>
+<script src="/js/local-search.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 
 
@@ -511,59 +527,6 @@
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-
-    
 
   
 
