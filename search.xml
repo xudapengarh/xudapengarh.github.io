@@ -8,12 +8,14 @@
       <link href="/2020/07/23/Algorithm/meanshift/"/>
       <url>/2020/07/23/Algorithm/meanshift/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>聚类分析，又称群分析，指对样本数据的一种划分与归类的一种方法。聚类算法以相似性为基础，将样本数据中按照相似度不同分成不同的族群（类别）中。同一族群中，样本相似性相差小；不同族群中，样本相似性差异较大。</p><p>Meanshift，又称均值漂移算法，是一种基于核密度的估计算法，将每个族群的中心点移动到该族群的密度最大的位置，来对样本进行分类。</p><p>相较于其他分类算法，Meanshift 不需要指定分类的族群数量，而是根据样本特性自动生成不同类别的族群。其广泛应用于聚类、图像平滑、分割、跟踪等方面。</p><p>本文以聚类为例，探讨 Meanshift 的原理及实现。</p><a id="more"></a><h2 id="推导"><a href="#推导" class="headerlink" title="推导"></a>推导</h2><p>假设在给定的 d 维空间中 N 个样本数据点集 X，那么对于空间中的任意点 $x$ 的 mean shift 向量的基本形式可以表示为：</p><script type="math/tex; mode=display">M = \frac{1}{K} \sum_{x_i \in S_k} (x_i - x)</script><p>其中， $S_k$ 为数据集中的点 $x_i$ 到点 $x$ 的距离小于 d 维球半径的 r 的数据点，既：</p><script type="math/tex; mode=display">S_h(x) = \{ y:(y - x_i)^T(y - x_i) < h^2 \}</script><p>而漂移的过程，就是不断计算漂移向量，然后更新球心位置，更新公式为：</p><script type="math/tex; mode=display">x_{n+1} = x_n + M_n</script><h2 id="示例一"><a href="#示例一" class="headerlink" title="示例一"></a>示例一</h2><p>我们以二维平面上的点为例（d = 2）：</p><p><img src="/2020/07/23/Algorithm/meanshift/d_2_sample_1.png" style="zoom:50%;"></p><p>如上图所示，平面上散布着 200 个点，以半径 r = 0.3 进行更新漂移量 $M$ 的值，其过程如下：</p><p><img src="/2020/07/23/Algorithm/meanshift/d_2_sample_1.gif" style="zoom:50%;"></p>]]></content>
       
       
       <categories>
           
           <category> 算法 </category>
+          
+          <category> 聚类算法 </category>
           
       </categories>
       
@@ -21,6 +23,8 @@
         <tags>
             
             <tag> 算法 </tag>
+            
+            <tag> 聚类算法 </tag>
             
         </tags>
       
